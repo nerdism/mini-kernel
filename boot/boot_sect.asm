@@ -5,8 +5,8 @@ KERNEL_LOAD_ADDRESS equ 0x1000
 
 mov [BOOT_DRIVE], dl
 
-mov bp, 0x9000
-mov sp, bp
+mov bp, 0x9000	; stack base address
+mov sp, bp	; initialize stack pointer
 
 mov bx, REAL_MODE_MSG
 call printF
@@ -44,9 +44,9 @@ BEGIN_PM:
 
 
 BOOT_DRIVE	db 0
-KERNEL_LOAD_MSG db "loading kernel into memory" , 13, 10, 0
-REAL_MODE_MSG   db "started in 16 bit real mode", 13, 10, 0
-PM_MODE_MSG     db "switched to Protected mode" , 13, 10, 0
+KERNEL_LOAD_MSG db "loading kernel into memory" , 10, 13, 0
+REAL_MODE_MSG   db "started in 16 bit real mode", 10, 13, 0
+PM_MODE_MSG     db "switched to Protected mode" , 10, 13, 0
 
 times 510 -($ - $$) db 0 ; add zeros 
 

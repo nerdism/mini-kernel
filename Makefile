@@ -1,9 +1,9 @@
 
 CC=gcc -m32
 LD=ld -melf_i386
-CCOPTIONS= -ffreestanding -fno-pie -c
+CCOPTIONS= -Wall -ffreestanding -fno-pie -c -g -I drivers -I kernel
 
-SRCS=$(wildcard kernel/*.c driver/*.c)
+SRCS=$(wildcard kernel/*.c drivers/*.c)
 
 OBJS=${SRCS:.c=.o}
 
@@ -33,5 +33,7 @@ kernel_entry.o: kernel/kernel_entry.asm
 
 
 clean:
-	@rm *.o *.bin os-image
+	@rm os-image
+	@find . -name "*.o" -type f -delete
+	@find . -name "*.bin" -type f -delete
 	@echo "removed os-image *.o and *.bin files"
