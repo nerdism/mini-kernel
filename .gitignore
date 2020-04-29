@@ -1,5 +1,9 @@
 
 **/*.o
+<<<<<<< HEAD
 **/*.bin
 os-image
 
+=======
+os-image
+>>>>>>> 26a0b8a6d265274377c1fa88b623b4809eacceed
