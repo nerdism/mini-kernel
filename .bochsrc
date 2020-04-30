@@ -1,0 +1,8 @@
+
+# chs to use our boot sector code as though it were
+# a floppy disk inserted into a computer at boot time .
+port_e9_hack: enabled=1
+display_library: x, options="gui_debug"
+floppya : 1_44=os-image, status=inserted
+boot: a
+
