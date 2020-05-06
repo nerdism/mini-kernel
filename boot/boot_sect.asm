@@ -2,8 +2,7 @@
 [org 0x7c00]
 
 KERNEL_LOAD_ADDRESS equ 0x1000
-
-mov [BOOT_DRIVE], dl
+mov [BOOT_DRIVE], dl ; boot device number is in dl
 
 mov bp, 0x9000	; stack base address
 mov sp, bp	; initialize stack pointer
@@ -13,9 +12,12 @@ call printF
 
 call load_kernel    ; load kernel code
 
-call switch_to_pm
+call memtest	    ; measure the memory
+
+call switch_to_pm   ; switch to protected mode
 
 
+%include "memory_test.asm"
 %include "print_func.asm"
 %include "disk_load.asm"
 %include "gdt.asm"

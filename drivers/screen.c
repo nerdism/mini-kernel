@@ -17,39 +17,31 @@
 
 static char *cursor;
 static int  video_end;
-void print(char *s) {
 
-    int i = 0;
-    while (s[i] != '\0') {  	
-	cursor = print_char(s[i++], cursor);
-    }
-    
-    set_cursor(((int)cursor-VIDEO_TEXT_MODE)/2);
-}
 
-char *print_char(char c, char *crs) {
-    int offset = ((int)crs - VIDEO_TEXT_MODE)/2;
+void print_char(char c) {
+    int offset = ((int)cursor - VIDEO_TEXT_MODE)/2;
     
     if (c == '\n') {
 	int t = (COLS - (offset % COLS))*2;
-	if ((int)crs + t >= video_end) {
+	if ((int)cursor + t >= video_end) {
 	    scroll();	
-	    crs += (t-COLS*2);
+	    cursor += (t-COLS*2);
 	}
 	else {
-	    crs += t;	
+	    cursor += t;	
 	}
     }
     else {
-	if ((int)crs + 2 > video_end) {
+	if ((int)cursor + 2 > video_end) {
 	    scroll();	
-	    crs -= (COLS*2);
+	    cursor -= (COLS*2);
 	}
-	crs[0] = c; 
-	crs[1] = RED_ON_BLACK;
-	crs += 2;
+	cursor[0] = c; 
+	cursor[1] = RED_ON_BLACK;
+	cursor += 2;
     }
-    return crs;
+    set_cursor(((int)cursor-VIDEO_TEXT_MODE)/2);
 }
 
 void scroll() {

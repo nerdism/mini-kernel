@@ -1,8 +1,8 @@
 
 CC=gcc -m32
-LD=ld -melf_i386
+LD=ld -melf_i386 
 CCOPTIONS= -Wall -ffreestanding -fno-pie -c -g -I drivers -I kernel
-
+BOOT_FILES=$(wildcard boot/*.asm)
 SRCS=$(wildcard kernel/*.c drivers/*.c)
 
 OBJS=${SRCS:.c=.o}
@@ -11,8 +11,8 @@ os-image: boot_sect.bin kernel.bin
 	@cat $^ > $@
 	@echo "os-image 	has been built"
 
-boot_sect.bin:	boot/boot_sect.asm
-	@nasm -I boot/ -f bin $^ -o $@
+boot_sect.bin:	boot/boot_sect.asm $(BOOT_FILES)
+	@nasm -I boot/ -f bin $< -o $@
 	@echo "boot_sect.bin	has been built"
 
 kernel.bin:  kernel_entry.o ${OBJS}

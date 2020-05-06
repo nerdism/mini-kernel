@@ -15,3 +15,4 @@ it loads mbr to address 0x7c00 (but why)
 as far as i know its a standard for ibm computer to load at that place
 
 
+
