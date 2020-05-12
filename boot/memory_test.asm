@@ -49,7 +49,7 @@ memtest_fail:
 
 memtest_done:
     mov eax, dword [MEM_ENT_CNT]
-    cmp eax, 0
+    cmp eax, 0				; if number of entries is zero means memtest failed
     je memtest_fail
     popa
     ret
