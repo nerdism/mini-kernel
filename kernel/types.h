@@ -2,6 +2,8 @@
 #define TYPES_H
 
 
+#define KILO 1024
+#define MEGA (KILO * KILO)
 
 /* signed */
 typedef long long   int64_t;
