@@ -3,6 +3,7 @@
 #include "types.h"
 #include "memory.h"
 #include "memory_bitmap.h"
+#include "kmalloc.h"
 
 /**
  * for more explanation about this struct go to 
@@ -61,6 +62,7 @@ void memory_init() {
     
     memory_start = mem_begin;
 
+    kmalloc_init((void*)0, 0);
     bitmap_memory_init(memory_start, max_len); 
 }
 
