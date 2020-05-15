@@ -1,3 +1,11 @@
+[extern interrupt_handler]
+
+;------------- Constants ---------------
+KERNEL_LOAD_ADDRESS equ 0x1000 
+HIGHER_OFFSET equ 0x0000
+;----------------------------------------
+
+
 ;----------- Macros ---------------------
 
 ; multi line instructions in one line except pop instruction.
@@ -11,6 +19,7 @@
     %endrep
 %endmacro
 ;--------- End Macros --------------------
+
 
 ; ---------------- Interrupts ---------------------
 
@@ -74,7 +83,7 @@ interrupt47: multi push 0, push 47, jmp intr_handler
 
 intr_handler:
     pushad 
-    push dword [esp+36] ; second interrupt_handler argument (i.e code) -> interrupt code
+    push dword [esp+36] ; second interrupt_handler argument (i.e code) -> interrupt code ; why 36? because 8 register + second argument 9 * 4 bytes
     push dword [esp+36] ; first interrupt_handler argument (i.e intr_num) -> interrupt number
     mov eax, 2 * 8 ; switch to data segment inorder to retrieve some data stored already in data segment defined in gdt
     mov ds, eax
@@ -84,4 +93,58 @@ intr_handler:
 
 
 start_idt:
-    dw interrupt00 -  
+    dw interrupt00 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt01 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt02 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt03 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt04 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt05 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt06 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt07 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt08 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt09 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt10 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt11 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt12 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt13 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt14 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt15 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt16 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt17 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt18 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt19 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt20 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt21 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt22 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt23 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt24 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt25 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt26 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt27 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt28 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt29 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt30 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt31 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt32 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt33 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt34 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt35 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt36 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt37 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt38 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt39 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt40 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt41 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt42 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt43 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt44 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt45 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt46 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt47 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    ;dw interrupt47 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+
+
+idt_descriptor:
+    dw idt_descriptor - start_idt
+    dd start_idt 
+
