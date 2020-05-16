@@ -25,6 +25,8 @@ IRQ Interrupts:
  * for system call intr number we can use any available number greater than 47, i.e 48
  * */
 
+
+void interrupt_handler(int intr_num, int code);
 void intr_ack();
 void intr_block();
 void intr_disable(int intr_num);

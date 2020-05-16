@@ -55,9 +55,12 @@ void intr_init() {
        intr_count[i] = 0;
        intr_spurious[i] = 0;
     }
+
+    intr_unblock(); /* After this point we accept the interrupt again */
+
 }
 
-void intr_handler(int intr_num, int code) {
+void interrupt_handler(int intr_num, int code) {
     printf("\ninterrupt: num %i\tcode %i\n", intr_num, code);
     intr_count[intr_num]++;
 
@@ -65,4 +68,50 @@ void intr_handler(int intr_num, int code) {
         intr_spurious[intr_num]++;
     }
 }
+
+/*
+ * We mapped already IRQs to 32 to 47. In order to retrieve the actual number we should find the subtraction 32 - intr_num
+ * */
+void intr_ack(int intr_num) {
+
+    if (intr_num > 31)
+        pic_ack(intr_num - 32);
+
+}
+
+void intr_disable(int intr_num) {
+
+    if (intr_num > 31)
+        pic_disable(intr_num - 32);
+
+}
+
+void intr_enable(int intr_num) {
+
+    if (intr_num > 31)
+        pic_enable(intr_num - 32);
+
+}
+
+/* clear interrupt */
+void intr_block() {
+    asm("cli");
+}
+
+/* set interrupt */
+void intr_unblock() {
+    asm("sti");
+}
+
+/* 
+ * hlt instruction halts cput until the next external interrupt is fired.
+ * The HLT instruction is executed by the operating system when there is no immediate work to be done, \
+ * and the system enters its idle state.
+ */
+
+void intr_wait() {
+    asm("sti");
+    asm("hlt");
+}
+
 
