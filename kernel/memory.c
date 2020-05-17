@@ -51,24 +51,24 @@ void memory_init() {
 	    max_len = mem_ptr[i].limitl;
 	}
     }
+    if (max_len < 2 * MEGA) {
+	printf("[-] memory is less then 2 MB which is not functional\n");
+	return;
+    }
 
-    uint8_t ismb = 0;
-    if (max_len > MEGA) ismb = 1;
-    printf("free memory begin: 0x%h, len: %u %s\n",
-		mem_begin,
-		((ismb)	? max_len/MEGA	: max_len/KILO),
-		((ismb) ? "MB"		: "KB"));
+    /* uint8_t ismb = 0; */
+    /* if (max_len > MEGA) ismb = 1; */
+    /* printf("free memory begin: 0x%h, len: %u %s\n", */
+		/* mem_begin, */
+		/* ((ismb)	? max_len/MEGA	: max_len/KILO), */
+		/* ((ismb) ? "MB"		: "KB")); */
     
     
     memory_start = mem_begin;
 
-    kmalloc_init((void*)0, 0);
-    bitmap_memory_init(memory_start, max_len); 
+    kmalloc_init(memory_start, MEGA);
+    bitmap_memory_init(memory_start+MEGA, max_len-MEGA); 
 }
-
-
-
-
 
 
 
