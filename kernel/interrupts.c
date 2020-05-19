@@ -82,14 +82,14 @@ void intr_ack(int intr_num) {
 void intr_disable(int intr_num) {
 
     if (intr_num > 31)
-        pic_disable(intr_num - 32);
+        pic_irq_disable(intr_num - 32);
 
 }
 
 void intr_enable(int intr_num) {
 
     if (intr_num > 31)
-        pic_enable(intr_num - 32);
+        pic_irq_enable(intr_num - 32);
 
 }
 
