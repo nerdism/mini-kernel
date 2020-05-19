@@ -5,20 +5,23 @@
 
 #define ICW1 0x11 // 0x01 -> ICW4 needed, 0x10 -> ICW3 needed 
 #define ICW4 0x01 // 0x00 -> MCS 80/85 , 0x01 -> 80x86 mode
-#define PIC_ACK 0x60
+#define PIC_ACK 0x60 /* Specific EOI */
 
 uint8_t pic_control[2] = {0x20, 0xA0};
 uint8_t pic_data[2] = {0x21, 0xA1};
 
 
+/*
+ * Main goal here is to initialize the internal PIC registers.
+ * */
 void pic_init(int offset1, int offset2){
     
     /* master config */
     outb(ICW1, pic_control[0]); 
     outb(offset1, pic_data[0]); /* ICW2 */
-    outb(0x04, pic_data[0]);
-    outb(ICW4, pic_data[0]);
-    outb(~(0x04), pic_data[0]); /* update mask register*/
+    outb(0x04, pic_data[0]); /* ICW3 */
+    outb(ICW4, pic_data[0]); 
+    outb(~(0x04), pic_data[0]); /* OCW1 update mask register*/
 
     /* slave config */
     outb(ICW1, pic_control[1]);
