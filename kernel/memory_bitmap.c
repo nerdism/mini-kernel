@@ -94,7 +94,7 @@ void bitmap_memory_init(void *memory_start, uint32_t limit) {
 
 
     if (!bitmap_mem_test()) printf("bitmap memory failed\n");
-    else printf("bitmap memory initialized\n");
+    else printf("[+] bitmap memory initialized\n");
 }
 
 /* allocate blocks of memory with given size */
