@@ -28,7 +28,7 @@ kernel.bin:  kernel_entry.o ${OBJS}
 	@echo "$@ 	has been built"
 
 kernel_entry.o: kernel/kernel_entry.asm
-	@nasm -f elf $^ -o $@
+	@nasm -I kernel/ -f elf $^ -o $@
 	@echo "kernel_entry.o 	has been built"
 
 
