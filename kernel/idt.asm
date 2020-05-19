@@ -93,54 +93,54 @@ intr_handler:
 
 
 start_idt:
-    dw interrupt00 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt01 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt02 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt03 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt04 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt05 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt06 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt07 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt08 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt09 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt10 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt11 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt12 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt13 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt14 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt15 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt16 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt17 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt18 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt19 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt20 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt21 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt22 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt23 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt24 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt25 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt26 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt27 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt28 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt29 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt30 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt31 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt32 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt33 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt34 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt35 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt36 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt37 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt38 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt39 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt40 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt41 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt42 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt43 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt44 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt45 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt46 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
-    dw interrupt47 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt00 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt01 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt02 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt03 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt04 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt05 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt06 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt07 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt08 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt09 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt10 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt11 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt12 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt13 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt14 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt15 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt16 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt17 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt18 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt19 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt20 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt21 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt22 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt23 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt24 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt25 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt26 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt27 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt28 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt29 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt30 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt31 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt32 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt33 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt34 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt35 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt36 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt37 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt38 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt39 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt40 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt41 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt42 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt43 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt44 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt45 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt46 , 8, 0x8e00, HIGHER_OFFSET
+    dw interrupt47 , 8, 0x8e00, HIGHER_OFFSET
     ;dw interrupt47 - KERNEL_LOAD_ADDRESS, 8, 0x8e00, HIGHER_OFFSET
 
 
