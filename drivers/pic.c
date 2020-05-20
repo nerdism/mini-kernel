@@ -17,9 +17,8 @@ uint8_t pic_data[2] = {0x21, 0xa1};
 void pic_init(int offset1, int offset2){
     
     /* master config */
-    outb(ICW1, pic_control[0]); 
     outb(pic_control[0], ICW1); 
-    outb(pic_control[0], offset1); /* ICW2 */
+    outb(pic_data[0], offset1); /* ICW2 */
     outb(pic_data[0], 1 << 2); /* ICW3 */
     outb(pic_data[0], ICW4); 
     outb(pic_data[0], ~(1 << 2)); /* OCW1 update mask register*/
