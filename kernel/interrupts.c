@@ -57,12 +57,23 @@ void intr_init() {
     }
 
     intr_unblock(); /* After this point we accept the interrupt again */
+    printf("[+] interrupt ready\n");
 
 }
 
 void interrupt_handler(int intr_num, int code) {
-    printf("\ninterrupt: num %i\tcode %i\n", intr_num, code);
+
+    //TODO: when printf %s added edit this printf to show the name of the exception.
+    if (intr_num < 32)
+        printf("\ninterrupt: Exception num %d '%c' code %d\n", intr_num, exceptions[intr_num], code);
+
+    else
+        printf("\ninterrupt: num %d  code %d\n", intr_num, code);
+        
+
     intr_count[intr_num]++;
+    
+    intr_ack(intr_num);
 
     if (intr_num > 31){
         intr_spurious[intr_num]++;
