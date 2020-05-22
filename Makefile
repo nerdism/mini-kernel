@@ -1,7 +1,7 @@
 
 CC=gcc -m32
 LD=ld -melf_i386 
-CCOPTIONS= -Wall -ffreestanding -fno-pie -c -g -I drivers -I kernel
+CCOPTIONS= -Wall -ffreestanding -fno-pie -c -g -I drivers -I kernel -std=gnu99 -g
 BOOT_FILES=$(wildcard boot/*.asm)
 KASM=$(wildcard kernel/*.asm)
 SRCS=$(wildcard kernel/*.c drivers/*.c)

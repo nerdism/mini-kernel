@@ -32,7 +32,7 @@ interrupt04: multi push 0, push 4,  jmp intr_handler
 interrupt05: multi push 0, push 5,  jmp intr_handler
 interrupt06: multi push 0, push 6,  jmp intr_handler
 interrupt07: multi push 0, push 7,  jmp intr_handler
-interrupt08: multi         push 8,  jmp intr_handler ; interrupt 8 already pushed its codes, so we need to push its number.
+interrupt08: multi  push 8,  jmp intr_handler ; interrupt 8 already pushed its codes, so we need to push its number.
 interrupt09: multi push 0, push 9,  jmp intr_handler
 interrupt10: multi         push 10, jmp intr_handler ; interrupt 10 already pushed its codes, so we need to push its number
 interrupt11: multi         push 11, jmp intr_handler ; interrupt 11 already pushed its codes, so we need to push its number 
@@ -85,10 +85,12 @@ intr_handler:
     pushad 
     push dword [esp+36] ; second interrupt_handler argument (i.e code) -> interrupt code ; why 36? because 8 register + second argument 9 * 4 bytes
     push dword [esp+36] ; first interrupt_handler argument (i.e intr_num) -> interrupt number
-    mov eax, 2 * 8 ; switch to data segment inorder to retrieve some data stored already in data segment defined in gdt
-    mov ds, eax
     call interrupt_handler ; call interrupt handler function in c file (interrupt.c)
+    add esp, 4
+    add esp, 4
     popad
+    add esp, 4
+    add esp, 4
     iret
 
 
