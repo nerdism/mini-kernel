@@ -16,6 +16,7 @@ boot_sect.bin:	boot/boot_sect.asm $(BOOT_FILES)
 	@nasm -I boot/ -f bin $< -o $@
 	@echo "boot_sect.bin	has been built"
 
+
 kernel.bin:  kernel_entry.o ${OBJS}
 	@$(LD) --oformat binary -Ttext 0x1000 $^ -o $@
 	@echo "kernel.bin 	has been built"
@@ -34,7 +35,7 @@ kernel_entry.o: kernel/kernel_entry.asm ${KASM}
 
 
 clean:
-	@rm os-image
 	@find . -name "*.o" -type f -delete
 	@find . -name "*.bin" -type f -delete
+	@rm os-image
 	@echo "removed os-image *.o and *.bin files"

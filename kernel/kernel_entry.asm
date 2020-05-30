@@ -1,6 +1,9 @@
 
-[bits 32]
 [extern main]
+global _start
+_start:
+
+[bits 32]
 
 lidt [idt_descriptor]
 

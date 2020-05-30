@@ -18,10 +18,11 @@ void pic_ack(uint8_t irq);
 /**
  * How to program the pic ?
  * pic accepts two types of commands
- * 1) ICW: Initialization command words 
+ *
+ * 1) ICW: Initialization command word 
  *    we have ICW1, ICW2, ICW3, ICW4
  *
- * 2) OCW: Operation command words
+ * 2) OCW: Operation command word
  *    we have OCW1, OCW2, OCW3
  *  
  *  in order to program the pic we must first
@@ -74,8 +75,9 @@ void pic_ack(uint8_t irq);
  * | S7 | S6 | S5 | S4 | S3 | S2 | S1 | S0 |
  * ----------------------------------------
  * S0-S7: each S intdicates a pic pin number whether
- *	  connected to a slave pic or not 1 connvected
- *	  0 for not connected
+ *	  connected to a slave pic or not.
+ *	  1 = connected
+ *	  0 = not connected
  *
  *    ICW3 port (0xa1 slave)
  * -----------------------------------
