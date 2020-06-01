@@ -30,7 +30,7 @@ load_kernel:
     call printF
 
     mov bx, KERNEL_LOAD_ADDRESS
-    mov dh, 15	; read this much sector after boot sector
+    mov dh, 35	; read this much sector after boot sector
     mov dl, [BOOT_DRIVE]
     call disk_load
     ret
