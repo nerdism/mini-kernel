@@ -60,8 +60,8 @@ interrupt30: multi push 0, push 30, jmp intr_handler
 interrupt31: multi push 0, push 31, jmp intr_handler
 
 ;---- PIC interrupts IRQs -----
-interrupt32: multi push 0, push 31, jmp intr_handler
-interrupt33: multi push 0, push 32, jmp intr_handler
+interrupt32: multi push 0, push 32, jmp intr_handler
+interrupt33: multi push 0, push 33, jmp intr_handler
 interrupt34: multi push 0, push 34, jmp intr_handler
 interrupt35: multi push 0, push 35, jmp intr_handler
 interrupt36: multi push 0, push 36, jmp intr_handler
@@ -149,4 +149,5 @@ start_idt:
 idt_descriptor:
     dw idt_descriptor - start_idt
     dd start_idt 
+
 
