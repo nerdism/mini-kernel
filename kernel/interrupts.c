@@ -3,7 +3,7 @@
 #include "printf.h"
 #include "types.h"
 
-
+intr_handler_t handlers[48]; /* An array of 48 interrupt handlers*/
 uint32_t intr_count[48]; /* Record how many each intr occures */
 uint8_t intr_spurious[48]; /* Record how many each intr occures */
 
@@ -54,6 +54,7 @@ void intr_init() {
     for (int i = 0; i < 48; i++) {
        intr_count[i] = 0;
        intr_spurious[i] = 0;
+       handlers[i] = NULL;
     }
 
     intr_unblock(); /* After this point we accept the interrupt again */
@@ -63,21 +64,23 @@ void intr_init() {
 
 void interrupt_handler(int intr_num, int code) {
 
-    //TODO: when printf %s added edit this printf to show the name of the exception.
-    if (intr_num < 32)
-        printf("\ninterrupt: Exception num %d '%c' code %d\n", intr_num, exceptions[intr_num], code);
+    if (handlers[intr_num] != NULL) {
+        (handlers[intr_num]) (intr_num, code);
+        intr_ack(intr_num);
+        intr_count[intr_num]++;
+    }
 
+    else if(intr_num < 32) {
+        //TODO: when printf %s added edit this printf to show the name of the exception.
+        printf("\ninterrupt: Exception num %d '%c' code %d\n", intr_num, exceptions[intr_num], code);
+    }
     else
         printf("\ninterrupt: num %d  code %d\n", intr_num, code);
-        
+}
 
-    intr_count[intr_num]++;
-    
-    intr_ack(intr_num);
 
-    if (intr_num > 31){
-        intr_spurious[intr_num]++;
-    }
+void intr_handler_register(int intr_num, intr_handler_t handler) {
+    handlers[intr_num] = handler;
 }
 
 /*
