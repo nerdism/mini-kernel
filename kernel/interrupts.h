@@ -27,7 +27,7 @@ IRQ Interrupts:
 
 typedef void (*intr_handler_t) (int intr_num, int code); /* function pointer for each hardware and software interrupts.*/
 void interrupt_handler(int intr_num, int code);
-void intr_handler_register(int intr_num, int code);
+void intr_handler_register(int intr_num, intr_handler_t handler);
 void intr_ack();
 void intr_block();
 void intr_disable(int intr_num);

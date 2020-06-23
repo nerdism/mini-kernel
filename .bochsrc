@@ -3,9 +3,16 @@
 # a floppy disk inserted into a computer at boot time .
 port_e9_hack: enabled=1
 display_library: x, options="gui_debug"
+
+
+# mini kernel options
+# config_interface: wx
 floppya : 1_44=os-image, status=inserted
 ata0-master: type=disk, path="10M.img", mode=flat, cylinders=20, heads=16, spt=63
-
-# config_interface: wx
 boot: a
+clock: sync=realtime, time0=local
 
+# basekernel options
+#boot: cdrom
+#ata0-master: type=disk, path="/home/mrsmiler-comp/everything/codes/c/projects/basekernel/disk.img", mode=flat, cylinders=20, heads=16, spt=63
+#ata1-slave:  type=cdrom, path="/home/mrsmiler-comp/everything/codes/c/projects/basekernel/basekernel.iso", status=inserted

@@ -4,20 +4,27 @@
  */
 
 #include "ata.h"
+#include "pit.h"
+#include "types.h"
 #include "printf.h"
 #include "low_level.h"
+#include "kmalloc.h"
+#include "string.h"
+
+
+#define ATA_BLOCK_SIZE	512
 
 /* primary bus io registers base address	*/
-#define PRIM_IO_BASE 0x1f0
+#define PRIM_IO_BASE	0x1f0
 
 /* primary bus control registers base address	*/
-#define PRIM_CTRL_BASE 0x3f6
+#define PRIM_CTRL_BASE	0x3f6
 
 /* secondary bus io registers base address	*/
-#define SCND_IO_BASE 0x170
+#define SCND_IO_BASE	0x170
 
 /* secondary bus control registers base address */
-#define SCND_CTRL_BASE 0x376
+#define SCND_CTRL_BASE	0x376
 
 
 /* offset from io base */
@@ -39,53 +46,218 @@
 #define DRADDR_REG  1 /* Drive Adress register     R   */
 
 
-#define STATUS_ERR 0x01	    /* indicates an error occureed		      */
+#define STATUS_ERR 0x01	    /* indicates an error occured		      */
+#define STATUS_IDX 0x02	    /* index. always set to zero		      */
+#define STATUS_COR 0x04	    /* corrected data. always set to zero	      */
 #define STATUS_DRQ 0x08	    /* set when data has pio data to transfer	      */
-#define STATUS_DF  0x40	    /* Drive fault error (does not set ERR)	      */
+#define STATUS_SRV 0x10	    /* Overlapped Mode Service Request. 	      */
+#define STATUS_DF  0x20	    /* Drive fault error (does not set ERR)	      */
+#define STATUS_RDY 0x40	    /* driver ready				      */
 #define STATUS_BSY 0x80	    /* indicates the drive is preparing to send/recv  */
 
+/* useful commands */
 #define IDENTIFY_COMMAND 0xEC 
+#define RESET_COMMAND	 0x04
+#define READ_SECTORS	 0x20
+#define WRITE_SECTORS	 0x30
 
-/* Primary address. register address	*/
-#define PA(REG) PRIM_IO_BASE + REG
 
-/* Secondary address. register address	*/
-#define SA(REG) SCND_IO_BASE + REG
+/* Base Address register type */
+#define IO	0
+#define CTRL	1
 
-static inline uint8_t read_status_reg() {
-    return inb(PA(ERROR_REG));
+static uint16_t prim_bus[2] = {PRIM_IO_BASE, PRIM_CTRL_BASE};
+
+
+
+/* read a byte from a register 
+ * @Param type type of the base address
+ * @Param reg  register name (macro name)
+ *  
+ *  ex.   readb_reg(IO,	STATUS_REG);
+ **/
+static inline uint8_t readb_reg(uint8_t type, uint8_t reg) {
+    return inb(prim_bus[type] + reg);
+}
+
+/* read a word from a register 
+ * paramaters are as same as readb_reg function */
+static inline uint16_t readw_reg(uint8_t type, uint8_t reg) {
+    return inw(prim_bus[type] + reg);
+}
+
+/* write a byte to a register 
+ * @Param type type of the base address
+ * @Param reg  register name (macro name)
+ * @Param data  one byte data to be send
+ *
+ *  ex.   writeb_reg(IO, DRHE_REG, RESET_COMMAND);
+ *  ex.   writeb_reg(IO, DATA_REG, 0xff);
+ */
+static inline void writeb_reg(uint8_t type, uint8_t reg, uint8_t data) {
+    outb(prim_bus[type] + reg, data);
+}
+
+static inline void writew_reg(uint8_t type, uint8_t reg, uint16_t data) {
+    outw(prim_bus[type] + reg, data);
 }
 
 static inline bool pio_ready() {
-    uint8_t stat = read_status_reg();
-
-    /* if error bits are set */
-    if ((stat & STATUS_ERR) || (stat & STATUS_DF)) {
-	return 0;
+    
+    while (1) {
+	clock_wait(1);
+	uint8_t stat = readb_reg(IO, STATUS_REG);
+	/* if error bits are set */
+	if ((stat & STATUS_ERR) || (stat & STATUS_DF)) {
+	    return 0;
+	}
+	/* check if busy bit cleard and drq bit set */
+	else if (!(stat & STATUS_BSY) && (stat & STATUS_DRQ)) {
+	    return 1;
+	}
     }
-    /* check if busy bit cleard and drq bit set */
-    else if (!(stat & STATUS_BSY) && (stat & STATUS_DRQ)) {
-	return 1;
-    }
-    else 
-	return 0;
+    
 }
 
+static inline void ata_soft_reset() {
+    writeb_reg(CTRL, DEVCTRL_REG, RESET_COMMAND);
+    clock_wait(1);
+    writeb_reg(CTRL, DEVCTRL_REG, 0);
+    clock_wait(1);
+}
+
+/* 
+ * detect if a ata device such as hard disk
+ * or cdrom is connected to the ata bus
+ */
+static bool ata_detect() {
+    uint8_t status;
+
+    status = readb_reg(IO, STATUS_REG);
+
+    /* this means nothing attached to ata bus */
+    if (status == 0xff) {
+	return 0;
+    }
+
+
+    /* ata_soft_reset(); */
+
+    writeb_reg(IO, DRHE_REG, 0xA0); /* why 0xa0 ? */
+    clock_wait(1);
+
+    writeb_reg(IO, SECTCNT_REG, 0);
+    writeb_reg(IO, SECTNUM_REG, 0);
+    writeb_reg(IO, CYLLOW_REG,  0);
+    writeb_reg(IO, CYLHIGH_REG, 0);
+
+    writeb_reg(IO, COMMAND_REG, IDENTIFY_COMMAND);
+    clock_wait(1);
+    status = readb_reg(IO, STATUS_REG);
+    if (!pio_ready()) {
+	return 0;
+    }
+
+    uint16_t buf[256];
+    
+    for (int i = 0; i < 256; i++) {
+	buf[i] =  readw_reg(IO, DATA_REG);
+    }
+    printf("cylinders:           %u\n", buf[1]);
+    printf("heads:               %u\n", buf[3]);
+    printf("sector per track:    %u\n", buf[6]);
+    return 1;
+}
+
+static void print_blocks(void *buf, uint32_t blocks_cnt) {
+
+    for (int i = 0; i < ATA_BLOCK_SIZE * blocks_cnt; i++) {
+	printf("%c,", ((char*)buf)[i]); 
+    }
+}
 
 void ata_init() {
-    outb(PA(SECTCNT_REG), 0xA0);    
-    outb(PA(SECTNUM_REG), 0);    
-    outb(PA(CYLLOW_REG ), 0);    
-    outb(PA(CYLHIGH_REG), 0);    
+    
+    /* see if we have any connected device */
+    if (ata_detect()) {
+	printf("ata0 initialized\n"); 
+    } 
+    else {
+	printf("ata0 does not exist\n"); 
+    }
+    
+    /* uint32_t cnt = 2; */
+    /* char wbuf[cnt * ATA_BLOCK_SIZE]; */
+    /* memset(wbuf, 'z', cnt * ATA_BLOCK_SIZE); */
+    
+    /* ata_write_blocks(20, cnt, wbuf); */
 
-    outb(PA(COMMAND_REG), IDENTIFY_COMMAND);
+    /* void *buf = kmalloc(cnt * ATA_BLOCK_SIZE); */
+    /* ata_read_blocks(20, cnt, buf); */ 
 
-    uint8_t status;
-    /* do { */
-	/* status = read_status_reg(); */
-	/* printf("status: %u\n", status); */
-    /* } while(status == 1); */
+    /* print_blocks(buf, cnt); */
+    
 }
 
+
+void ata_read_blocks(uint32_t lba, uint8_t block_cnt, void *buf) {
+    
+    writeb_reg(IO, DRHE_REG, (0xE0 | ((lba >> 24) & 0x0f)));
+    writeb_reg(IO, FEATURE_REG, 0); /* can be ignored */
+    writeb_reg(IO, SECTCNT_REG, block_cnt);
+
+    writeb_reg(IO, SECTNUM_REG, lba);
+    writeb_reg(IO, CYLLOW_REG,  lba >> 8);
+    writeb_reg(IO, CYLHIGH_REG, lba >> 16);
+
+    writeb_reg(IO, COMMAND_REG, READ_SECTORS);
+    
+    uint16_t cnt = (block_cnt == 0 ? 256 : block_cnt);
+    uint16_t *buffer = (uint16_t*)buf;  	
+    while (cnt > 0) {
+	if (pio_ready()) {
+	    for (int i = 0; i < 256; i++) {
+		buffer[i] = readw_reg(IO, DATA_REG);	
+	    }
+	    cnt--;
+	    buffer += 256;
+	    printf("read a block\n");
+	}
+	else {
+	    return; 
+	}
+    }
+
+    
+}
+
+
+void ata_write_blocks(uint32_t lba, uint8_t block_cnt, void *buf) {
+    writeb_reg(IO, DRHE_REG, (0xE0 | ((lba >> 24) & 0x0f)));
+    writeb_reg(IO, FEATURE_REG, 0); /* can be ignored */
+    writeb_reg(IO, SECTCNT_REG, block_cnt);
+
+    writeb_reg(IO, SECTNUM_REG, lba);
+    writeb_reg(IO, CYLLOW_REG,  lba >> 8);
+    writeb_reg(IO, CYLHIGH_REG, lba >> 16);
+
+    writeb_reg(IO, COMMAND_REG, WRITE_SECTORS);
+    
+    uint16_t cnt = (block_cnt == 0 ? 256 : block_cnt);
+    uint16_t *buffer = (uint16_t*)buf;  	
+    while (cnt > 0) {
+	if (pio_ready()) {
+	    for (int i = 0; i < 256; i++) {
+		writew_reg(IO, DATA_REG, buffer[i]);	
+	    }
+	    cnt--;
+	    buffer += 256;
+	    printf("wrote a block\n");
+	}
+	else {
+	    return; 
+	}
+    }
+}
 
 

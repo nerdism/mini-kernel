@@ -54,7 +54,7 @@ void intr_init() {
     for (int i = 0; i < 48; i++) {
        intr_count[i] = 0;
        intr_spurious[i] = 0;
-       handlers[i] = NULL;
+       handlers[i] = 0;
     }
 
     intr_unblock(); /* After this point we accept the interrupt again */
@@ -64,18 +64,28 @@ void intr_init() {
 
 void interrupt_handler(int intr_num, int code) {
 
-    if (handlers[intr_num] != NULL) {
+    intr_count[intr_num]++;
+
+    if (handlers[intr_num] != 0) {
         (handlers[intr_num]) (intr_num, code);
-        intr_ack(intr_num);
-        intr_count[intr_num]++;
     }
 
-    else if(intr_num < 32) {
-        //TODO: when printf %s added edit this printf to show the name of the exception.
-        printf("\ninterrupt: Exception num %d '%c' code %d\n", intr_num, exceptions[intr_num], code);
+
+    /* check if it's hardware interrupt */
+    if (intr_num >= 32 && intr_num < 48) {
+	/* send end of interrupt to pic */
+	intr_ack(intr_num);
     }
-    else
-        printf("\ninterrupt: num %d  code %d\n", intr_num, code);
+	
+
+    /* if(intr_num < 32) { */
+    /*     //TODO: when printf %s added edit this printf to show the name of the exception. */
+    /*     printf("\ninterrupt: Exception num %d '%c' code %d\n", intr_num, exceptions[intr_num], code); */
+    /* } */
+    /* else */
+    /*     printf("\ninterrupt: num %d  code %d\n", intr_num, code); */
+
+
 }
 
 

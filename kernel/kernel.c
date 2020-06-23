@@ -8,11 +8,10 @@
 
 void main() {
     init_screen();    
-    printf("[+] screen init\n");
     memory_init();
     intr_init();
     pit_init();
-    /* ata_init(); */
+    ata_init();
 
     
     // printf("free memory begins from 0x%h\n", (uint32_t)m);
