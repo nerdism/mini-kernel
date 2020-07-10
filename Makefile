@@ -1,7 +1,7 @@
 
 CC=gcc -m32
 LD=ld -melf_i386 
-CCOPTIONS= -Wall -ffreestanding -fno-pie -c -g -I drivers -I kernel -std=gnu99 -g
+CCOPTIONS= -Wall -ffreestanding -fno-pie -c -g -std=gnu99 
 BOOT_FILES=$(wildcard boot/*.asm)
 KASM=$(wildcard kernel/*.asm)
 SRCS=$(wildcard kernel/*.c drivers/*.c)
@@ -26,7 +26,7 @@ kernel.bin:  kernel_entry.o ${OBJS}
 #	@echo "kernel.o 	has been built"
 
 %.o: %.c
-	@$(CC) $(CCOPTIONS) $< -o $@
+	@$(CC) $(CCOPTIONS) -I include $< -o $@
 	@echo "$@ 	has been built"
 
 kernel_entry.o: kernel/kernel_entry.asm ${KASM}
