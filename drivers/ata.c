@@ -3,13 +3,13 @@
  * this file contains ata driver implemention
  */
 
-#include "ata.h"
-#include "pit.h"
+#include "drivers/ata.h"
+#include "drivers/pit.h"
 #include "types.h"
 #include "printf.h"
-#include "low_level.h"
-#include "kmalloc.h"
-#include "string.h"
+#include "kernel/low_level.h"
+#include "kernel/kmalloc.h"
+#include "kernel/string.h"
 
 
 #define ATA_BLOCK_SIZE	512
@@ -169,12 +169,14 @@ static bool ata_detect() {
     return 1;
 }
 
+#if defined(DEBUG)
 static void print_blocks(void *buf, uint32_t blocks_cnt) {
 
     for (int i = 0; i < ATA_BLOCK_SIZE * blocks_cnt; i++) {
 	printf("%c,", ((char*)buf)[i]); 
     }
 }
+#endif
 
 void ata_init() {
     

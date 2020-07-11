@@ -1,9 +1,9 @@
+#include "kernel/memory_layout.h"
+#include "kernel/memory_bitmap.h"
+#include "kernel/kmalloc.h"
+#include "kernel/memory.h"
 #include "printf.h"
-#include "memory_layout.h"
 #include "types.h"
-#include "memory.h"
-#include "memory_bitmap.h"
-#include "kmalloc.h"
 
 /**
  * for more explanation about this struct go to 

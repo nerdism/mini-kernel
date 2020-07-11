@@ -1,8 +1,8 @@
 
 #include "printf.h"
 #include "types.h"
-#include "memory_bitmap.h"
-#include "string.h"
+#include "kernel/memory_bitmap.h"
+#include "kernel/string.h"
 
 /* Memory Block Size */
 #define BLOCK 4096

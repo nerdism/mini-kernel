@@ -1,9 +1,9 @@
-#include "screen.h"
+#include "kernel/interrupts.h"
+#include "kernel/memory.h"
+#include "drivers/screen.h"
+#include "drivers/pit.h"
+#include "drivers/ata.h"
 #include "printf.h"
-#include "memory.h"
-#include "interrupts.h"
-#include "pit.h"
-#include "ata.h"
 
 
 void main() {

@@ -1,6 +1,6 @@
 
-#include "screen.h"
-#include "low_level.h"
+#include "drivers/screen.h"
+#include "kernel/low_level.h"
 
 #define VIDEO_TEXT_MODE 0xb8000
 #define ROWS 25
