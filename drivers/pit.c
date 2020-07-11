@@ -6,10 +6,10 @@
  * for explaining pit look at this pit.h
  **/
 
-#include "low_level.h"
+#include "kernel/low_level.h"
 #include "printf.h"
-#include "interrupts.h"
-#include "pit.h"
+#include "kernel/interrupts.h"
+#include "drivers/pit.h"
 
 /* Input frequency of every timer */
 #define IF 1193182	    /* Hz */
