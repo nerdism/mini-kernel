@@ -1,7 +1,9 @@
-#include "interrupts.h"
-#include "pic.h"
+#include "drivers/pic.h"
+#include "kernel/interrupts.h"
 #include "printf.h"
 #include "types.h"
+
+
 
 intr_handler_t handlers[48]; /* An array of 48 interrupt handlers*/
 uint32_t intr_count[48]; /* Record how many each intr occures */

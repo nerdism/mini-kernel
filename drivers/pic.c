@@ -1,7 +1,7 @@
-#include "low_level.h"
-#include "pic.h"
-#include "types.h" 
+#include "drivers/pic.h"
+#include "kernel/low_level.h"
 #include "printf.h"
+#include "types.h" 
 
 #define ICW1 0x11 // 0x01 -> ICW4 needed, 0x10 -> ICW3 needed 
 #define ICW4 0x01 // 0x00 -> MCS 80/85 , 0x01 -> 80x86 mode
