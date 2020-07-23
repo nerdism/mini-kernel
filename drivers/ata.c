@@ -1,6 +1,13 @@
 
 /**
  * this file contains ata driver implemention
+ *
+ *
+ * In short, volumes exist at the logical OS level,
+ * and partitions exist at the physical,
+ * media specific level.
+ * Sometimes there is a one-to-one correspondence, 
+ * but this is not guaranteed. 
  */
 
 #include "drivers/ata.h"
