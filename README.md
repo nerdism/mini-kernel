@@ -8,7 +8,7 @@ we only have tested this kernel on the bochs emulator so if you want to try it. 
 for running the kernel clone the project then
 
 </p>
-``` bash
+```
 $ make
 $ bochs
 ```
