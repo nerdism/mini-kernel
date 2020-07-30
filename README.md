@@ -15,7 +15,9 @@ $ bochs
 ```
 
 <p>
-if you are intersted in reading this kernel code but you don't have exprience and knowledge but you know c and some assembly for x86 machine you can find all you need in documents folder begin with os-dev pdf we ourselfs began from there after reading that I'm sure you will figure out how to begin reading our code and also the code structure
+if you are intersted in reading this kernel code but you don't have exprience or don't know where to begin but you know c and some assembly for x86 machine and operating system concepts you can find all you need in documents folder begin with os-dev pdf we ourselfs began from there after reading that I'm sure you will figure out how to begin reading our code and also the code structure, we are trying to make good documentation for this kernel and specially documentation for  drivers we wrote with the help of the books and other projcts mentioned.
+this kernel is written by two tremendously motivational iranian computer students.
+(at the time of writing this readme i think i drank to much coffie :D )
 </p>
 
 
