@@ -19,7 +19,6 @@
 #include "kernel/string.h"
 
 
-#define ATA_BLOCK_SIZE	512
 
 /* primary bus io registers base address	*/
 #define PRIM_IO_BASE	0x1f0
@@ -195,16 +194,19 @@ void ata_init() {
 	printf("ata0 does not exist\n"); 
     }
     
-    /* uint32_t cnt = 2; */
+    #if defined(DEBUG)
+    /* uint32_t cnt = 8; */
     /* char wbuf[cnt * ATA_BLOCK_SIZE]; */
-    /* memset(wbuf, 'z', cnt * ATA_BLOCK_SIZE); */
+    /* memset(wbuf, 'a', ATA_BLOCK_SIZE); */
+    /* memset(&wbuf[ATA_BLOCK_SIZE], 'b', ATA_BLOCK_SIZE); */
     
-    /* ata_write_blocks(20, cnt, wbuf); */
+    /* ata_write_blocks(17, cnt, wbuf); */
 
-    /* void *buf = kmalloc(cnt * ATA_BLOCK_SIZE); */
-    /* ata_read_blocks(20, cnt, buf); */ 
+    /* char buf[cnt * ATA_BLOCK_SIZE]; */
+    /* ata_read_blocks(17, cnt, buf); */ 
 
     /* print_blocks(buf, cnt); */
+    #endif
     
 }
 
@@ -224,6 +226,7 @@ void ata_read_blocks(uint32_t lba, uint8_t block_cnt, void *buf) {
     uint16_t cnt = (block_cnt == 0 ? 256 : block_cnt);
     uint16_t *buffer = (uint16_t*)buf;  	
     while (cnt > 0) {
+	/* clock_wait(1); /1* should wait 400 ns for every successive read or writes *1/ */	
 	if (pio_ready()) {
 	    for (int i = 0; i < 256; i++) {
 		buffer[i] = readw_reg(IO, DATA_REG);	
@@ -231,10 +234,12 @@ void ata_read_blocks(uint32_t lba, uint8_t block_cnt, void *buf) {
 	    cnt--;
 	    buffer += 256;
 	    printf("read a block\n");
+
 	}
 	else {
 	    return; 
 	}
+
     }
 
     

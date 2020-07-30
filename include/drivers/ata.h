@@ -2,8 +2,20 @@
 #define ATA_H
 
 #include "types.h"
+
+
+#define ATA_BLOCK_SIZE	512
+
+
+
 void ata_init();
 
+
+/**
+ * @Param lba (logical block addressing)
+ *  absolute number of the sector (it's zero base)
+ *
+ */
 void ata_read_blocks(uint32_t lba, uint8_t block_cnt, void *buf);
 
 void ata_write_blocks(uint32_t lba, uint8_t block_cnt, void *buf);

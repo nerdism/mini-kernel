@@ -26,7 +26,7 @@ kernel.bin:  kernel_entry.o ${OBJS}
 #	@echo "kernel.o 	has been built"
 
 %.o: %.c
-	@$(CC) $(CCOPTIONS) -I include $< -o $@
+	@$(CC) $(CCOPTIONS) -D DEBUG -I include $< -o $@
 	@echo "$@ 	has been built"
 
 kernel_entry.o: kernel/kernel_entry.asm ${KASM}
