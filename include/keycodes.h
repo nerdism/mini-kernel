@@ -8,7 +8,7 @@
 
 /* keycodes according to scan code set 1 */
 
-#define LSHIFT 0x2A
+#define LSHIFT 0x2a
 #define RSHIFT 0x36
 #define ALT 0x38 // Right alt scan code comes with an extra code 0xE0
 #define NUMPAD 0x45
