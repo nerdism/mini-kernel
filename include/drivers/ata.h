@@ -14,11 +14,17 @@ void ata_init();
 /**
  * @Param lba (logical block addressing)
  *  absolute number of the sector (it's zero base)
+ * 
+ * @Param block_cnt number of the blocks
  *
+ * @Param buf a buffer which we read or write data from or to it
  */
-void ata_read_blocks(uint32_t lba, uint8_t block_cnt, void *buf);
+bool ata_read_blocks(uint32_t lba, uint8_t block_cnt, void *buf);
 
-void ata_write_blocks(uint32_t lba, uint8_t block_cnt, void *buf);
+bool ata_write_blocks(uint32_t lba, uint8_t block_cnt, void *buf);
+
+/* detect the existance of a hard driver */
+bool ata_detect();
 
 /**
  * usualy in a system there are 2 ata bus

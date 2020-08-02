@@ -4,22 +4,20 @@
 #include "types.h"
 
 
-/*
-load_inode()
-save_inode()
 
-read_nth_block()
-allocate_free_block()
-save_nth_block()
-*/
+/* load_inode() */
+/* save_inode() */
+
+/* allocate_free_block() */
+/* save_nth_block() */
 
 
 /* static void debug   (Disk *disk); */
 /* static bool format  (Disk *disk); */
 
-/* bool	simplefs_mount   (Disk *disk); */
+bool	simplefs_mount   ();
 
-/* int32_t     create  (); */
+/* int32_t     create_inode  (); */
 /* bool        remove  (uint32_t inumber); */
 /* int32_t     stat    (uint32_t inumber); */
 

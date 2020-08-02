@@ -20,7 +20,10 @@ typedef unsigned char	    uint8_t;
 
 /* boolean */
 typedef uint8_t	    bool;
-
+enum {
+    false,
+    true
+};
 
 #endif
 

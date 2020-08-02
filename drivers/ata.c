@@ -2,12 +2,17 @@
 /**
  * this file contains ata driver implemention
  *
- *
+ * @TODO change below comment position
  * In short, volumes exist at the logical OS level,
  * and partitions exist at the physical,
  * media specific level.
  * Sometimes there is a one-to-one correspondence, 
  * but this is not guaranteed. 
+ *
+ * @TODO must of the code below is assumed
+ *  that we are only using ata0 bus and master
+ *  hard driver. so please write more general
+ *  code which works for all buses and slaves too.
  */
 
 #include "drivers/ata.h"
@@ -132,22 +137,25 @@ static inline void ata_soft_reset() {
     clock_wait(1);
 }
 
+/* @TODO: after having a architecture remove this */
+uint32_t ata_blocks;
+
 /* 
  * detect if a ata device such as hard disk
  * or cdrom is connected to the ata bus
  */
-static bool ata_detect() {
+bool ata_detect() {
     uint8_t status;
 
     status = readb_reg(IO, STATUS_REG);
 
     /* this means nothing attached to ata bus */
     if (status == 0xff) {
-	return 0;
+	return false;
     }
 
 
-    /* ata_soft_reset(); */
+    ata_soft_reset();
 
     writeb_reg(IO, DRHE_REG, 0xA0); /* why 0xa0 ? */
     clock_wait(1);
@@ -161,7 +169,7 @@ static bool ata_detect() {
     clock_wait(1);
     status = readb_reg(IO, STATUS_REG);
     if (!pio_ready()) {
-	return 0;
+	return false;
     }
 
     uint16_t buf[256];
@@ -172,7 +180,11 @@ static bool ata_detect() {
     printf("cylinders:           %u\n", buf[1]);
     printf("heads:               %u\n", buf[3]);
     printf("sector per track:    %u\n", buf[6]);
-    return 1;
+
+    ata_blocks = *((uint32_t*)&buf[57]);
+    printf("number of the blocks:    %u\n", ata_blocks);
+    
+    return true;
 }
 
 #if defined(DEBUG)
@@ -195,7 +207,7 @@ void ata_init() {
     }
     
     #if defined(DEBUG)
-    /* uint32_t cnt = 8; */
+    /* uint32_t cnt = 2; */
     /* char wbuf[cnt * ATA_BLOCK_SIZE]; */
     /* memset(wbuf, 'a', ATA_BLOCK_SIZE); */
     /* memset(&wbuf[ATA_BLOCK_SIZE], 'b', ATA_BLOCK_SIZE); */
@@ -210,9 +222,9 @@ void ata_init() {
     
 }
 
+/* sends some io command for reading/writing from/to data register*/
+inline static void ata_handle_io(uint32_t lba, uint8_t block_cnt, uint8_t command) {
 
-void ata_read_blocks(uint32_t lba, uint8_t block_cnt, void *buf) {
-    
     writeb_reg(IO, DRHE_REG, (0xE0 | ((lba >> 24) & 0x0f)));
     writeb_reg(IO, FEATURE_REG, 0); /* can be ignored */
     writeb_reg(IO, SECTCNT_REG, block_cnt);
@@ -222,7 +234,15 @@ void ata_read_blocks(uint32_t lba, uint8_t block_cnt, void *buf) {
     writeb_reg(IO, CYLHIGH_REG, lba >> 16);
 
     writeb_reg(IO, COMMAND_REG, READ_SECTORS);
+
+}
+
+
+bool ata_read_blocks(uint32_t lba, uint8_t block_cnt, void *buf) {
     
+    
+    ata_handle_io(lba, block_cnt, READ_SECTORS);  
+
     uint16_t cnt = (block_cnt == 0 ? 256 : block_cnt);
     uint16_t *buffer = (uint16_t*)buf;  	
     while (cnt > 0) {
@@ -233,29 +253,21 @@ void ata_read_blocks(uint32_t lba, uint8_t block_cnt, void *buf) {
 	    }
 	    cnt--;
 	    buffer += 256;
-	    printf("read a block\n");
 
 	}
 	else {
-	    return; 
+	    return false; 
 	}
 
     }
-
-    
+    printf("read %d blocks", block_cnt);
+    return true;
 }
 
 
-void ata_write_blocks(uint32_t lba, uint8_t block_cnt, void *buf) {
-    writeb_reg(IO, DRHE_REG, (0xE0 | ((lba >> 24) & 0x0f)));
-    writeb_reg(IO, FEATURE_REG, 0); /* can be ignored */
-    writeb_reg(IO, SECTCNT_REG, block_cnt);
+bool ata_write_blocks(uint32_t lba, uint8_t block_cnt, void *buf) {
 
-    writeb_reg(IO, SECTNUM_REG, lba);
-    writeb_reg(IO, CYLLOW_REG,  lba >> 8);
-    writeb_reg(IO, CYLHIGH_REG, lba >> 16);
-
-    writeb_reg(IO, COMMAND_REG, WRITE_SECTORS);
+    ata_handle_io(lba, block_cnt, WRITE_SECTORS);  
     
     uint16_t cnt = (block_cnt == 0 ? 256 : block_cnt);
     uint16_t *buffer = (uint16_t*)buf;  	
@@ -266,12 +278,13 @@ void ata_write_blocks(uint32_t lba, uint8_t block_cnt, void *buf) {
 	    }
 	    cnt--;
 	    buffer += 256;
-	    printf("wrote a block\n");
 	}
 	else {
-	    return; 
+	    return false; 
 	}
     }
+    printf("write %d blocks", block_cnt);
+    return true; 
 }
 
 
