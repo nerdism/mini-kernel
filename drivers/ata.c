@@ -200,10 +200,10 @@ void ata_init() {
     
     /* see if we have any connected device */
     if (ata_detect()) {
-	printf("ata0 initialized\n"); 
+	printf("[+] ata0 initialized\n"); 
     } 
     else {
-	printf("ata0 does not exist\n"); 
+	printf("[-] ata0 does not exist\n"); 
     }
     
     #if defined(DEBUG)

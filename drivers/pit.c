@@ -81,7 +81,7 @@ void pit_init() {
     intr_handler_register(PIT_INTR_NUM, pit_intr_handler);
     intr_enable(PIT_INTR_NUM);
 
-    printf("clock initialized\n");
+    printf("[+] clock initialized\n");
 }
 
 
