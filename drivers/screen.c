@@ -22,7 +22,7 @@ static int  video_end;
 void print_char(char c) {
     int offset = ((int)cursor - VIDEO_TEXT_MODE)/2;
     
-    if (c == '\n') {
+    if (c == '\n' || c == 13) {
 	int t = (COLS - (offset % COLS))*2;
 	if ((int)cursor + t >= video_end) {
 	    scroll();	
@@ -31,6 +31,15 @@ void print_char(char c) {
 	else {
 	    cursor += t;	
 	}
+    }
+    /* backspace */
+    else if (c == 8) {
+	/* @TODO: if cursor is at beginning of the line */
+
+	cursor -= 2;		
+	cursor[0] = '\0';
+	cursor[1] = WHITE_ON_BLACK;
+
     }
     else {
 	if ((int)cursor + 2 > video_end) {

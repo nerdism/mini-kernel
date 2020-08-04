@@ -2,6 +2,7 @@
 #include "kernel/memory.h"
 #include "drivers/screen.h"
 #include "drivers/keyboard.h"
+#include "kernel/kshell.h"
 #include "drivers/pit.h"
 #include "drivers/ata.h"
 #include "printf.h"
@@ -16,6 +17,7 @@ void main() {
     keyboard_init();
     
     
+    kshell_run();
     // printf("free memory begins from 0x%h\n", (uint32_t)m);
     // printf("free memory begins from 0x%h\n", (uint32_t)m2);
 }

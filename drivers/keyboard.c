@@ -1,4 +1,5 @@
 #include "drivers/keyboard.h"
+#include "drivers/screen.h"
 #include "kernel/interrupts.h"
 #include "kernel/low_level.h"
 #include "keycodes.h"
@@ -64,6 +65,8 @@ char keyboard_read() {
     char c = keyboard_buffer[output_buffer++];
     output_buffer %= BUF_SIZE;
 
+    print_char(c); 
+
     return c;
 }
 
@@ -89,6 +92,6 @@ void keyboard_init() {
     intr_handler_register(33, keyboard_interrupt_handler);
     intr_enable(33);
 
-    printf("[+] keyboard ready");
+    printf("[+] keyboard ready\n");
 
 }
