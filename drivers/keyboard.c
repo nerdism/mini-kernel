@@ -65,7 +65,6 @@ char keyboard_read() {
     char c = keyboard_buffer[output_buffer++];
     output_buffer %= BUF_SIZE;
 
-    print_char(c); 
 
     return c;
 }

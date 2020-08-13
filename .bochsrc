@@ -8,9 +8,9 @@ display_library: x, options="gui_debug"
 # mini kernel options
 # config_interface: wx
 floppya : 1_44=os-image, status=inserted
-ata0-master: type=disk, path="10M.img", mode=flat, cylinders=20, heads=16, spt=63
+ata0-master: type=disk, path="10M.2520B4k.img", mode=flat, cylinders=20, heads=16, spt=63
 boot: a
-#clock: sync=realtime, time0=local
+clock: sync=realtime, time0=local
 
 # basekernel options
 #boot: cdrom

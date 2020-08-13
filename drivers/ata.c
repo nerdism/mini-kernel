@@ -120,11 +120,11 @@ static inline bool pio_ready() {
 	uint8_t stat = readb_reg(IO, STATUS_REG);
 	/* if error bits are set */
 	if ((stat & STATUS_ERR) || (stat & STATUS_DF)) {
-	    return 0;
+	    return false;
 	}
 	/* check if busy bit cleard and drq bit set */
 	else if (!(stat & STATUS_BSY) && (stat & STATUS_DRQ)) {
-	    return 1;
+	    return true;
 	}
     }
     
@@ -155,7 +155,7 @@ bool ata_detect() {
     }
 
 
-    ata_soft_reset();
+    /* ata_soft_reset(); */
 
     writeb_reg(IO, DRHE_REG, 0xA0); /* why 0xa0 ? */
     clock_wait(1);
@@ -171,7 +171,6 @@ bool ata_detect() {
     if (!pio_ready()) {
 	return false;
     }
-
     uint16_t buf[256];
     
     for (int i = 0; i < 256; i++) {
@@ -260,7 +259,7 @@ bool ata_read_blocks(uint32_t lba, uint8_t block_cnt, void *buf) {
 	}
 
     }
-    printf("read %d blocks", block_cnt);
+    printf("read %d blocks\n", block_cnt);
     return true;
 }
 

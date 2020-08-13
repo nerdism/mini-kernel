@@ -8,4 +8,6 @@
  * */
 void *memset(void *s, uint8_t c, uint32_t n);
 
+int32_t strcmp(const char *s1, const char *s2) ;
+
 #endif
