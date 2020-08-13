@@ -2,7 +2,7 @@
 [org 0x7c00]
 
 KERNEL_LOAD_ADDRESS equ 0x1000
-mov [BOOT_DRIVE], dl ; boot device number is in dl
+mov [BOOT_DRIVE], dl ; boot device number is in dl (system put it there)
 
 mov bp, 0x9000	; stack base address
 mov sp, bp	; initialize stack pointer
@@ -30,7 +30,10 @@ load_kernel:
     call printF
 
     mov bx, KERNEL_LOAD_ADDRESS
-    mov dh, 35	; read this much sector after boot sector
+
+    ; @TODO: change below sector number to a variable
+    ; that containes size of kernel in sectors
+    mov dh, 50	; read this much sector after boot sector
     mov dl, [BOOT_DRIVE]
     call disk_load
     ret
